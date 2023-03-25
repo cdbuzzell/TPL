@@ -1,0 +1,344 @@
+﻿@page
+@model TPL.Web.Pages.StatisticsModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h2>@ViewData["Title"]</h2>
+    </div>
+    <div class="col-md-9 selector">
+        Season: @(Html.DropDownListFor(m => m.Seasons, Model.Seasons, null, new { onchange = "refreshSeason();" })) &nbsp;
+        Golfer: @(Html.DropDownListFor(m => m.Golfers, new SelectList(Model.Golfers, "Alias", "Name"), null, new { onchange = "refreshGolfer(null);" }))
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div id="leaderboard">
+            <h3 id="leaderboard-heading">Leaderboard</h3>
+            <table class="table" id="leaderboard-table">
+                <tr>
+                    <th>Rank</th>
+                    <th>Golfer</th>
+                    <th class="text-right">Par-3s</th>
+                    <th class="text-right">Wins</th>
+                    <th class="text-right">Points</th>
+                    <th class="text-right">Behind</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3 id="rounds-heading">Rounds</h3>
+        <table class="table" id="rounds-table">
+            <tr>
+                <th>Date</th>
+                <th>Round</th>
+                <th>Course</th>
+                <th>Game</th>
+                <th>Score</th>
+                <th class="text-right">Pts</th>
+                <th class="text-right">Par3s</th>
+                <th class="text-center">Win</th>
+            </tr>
+        </table>
+    </div>
+    <div id="chart1-container">Loading chart...</div>
+    <div id="chart2-container">Loading chart...</div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/lib/fusioncharts-suite-xt/fusioncharts.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            // get season, golfer from url query string
+            var season = getParameterByName("season");
+            var golfer = getParameterByName("golfer");
+
+            refreshAll(season, golfer);
+        })
+
+        function refreshAll(season, golfer) {
+
+            if (season == null || season == "") {
+                // no season in query string or dropdown changed
+                season = getSelection("Seasons")
+            }
+            else {
+                // season in url query string, so select season in dropdown
+                document.getElementById("Seasons").value = season;
+            }
+
+            if (golfer == null || golfer == "") {
+                // no season in query string or dropdown changed
+                golfer = getSelection("Golfers");
+            }
+            else {
+                // season in url query string, so select season in dropdown
+                document.getElementById("Golfers").value = golfer;
+            }
+
+            // update heading text
+            document.getElementById("leaderboard-heading").innerHTML = season + " Leaderboard";
+            document.getElementById("rounds-heading").innerHTML = season + " Rounds for " + getSelectionText("Golfers");
+
+            $.ajax({
+                url: '/Statistics?handler=StatisticsAjax&season=' + season + '&golfer=' + golfer,
+                type: 'GET',
+                dataType: 'json',
+                success: displayAll
+
+            });
+        }
+
+        function getSelection(field) {
+            var dropdown = document.getElementById(field);
+            return dropdown.options[dropdown.selectedIndex].value;
+        }
+
+        function getSelectionText(field) {
+            var dropdown = document.getElementById(field);
+            return dropdown.options[dropdown.selectedIndex].text;
+        }
+
+        function displayAll(statistics) {
+
+            // selected season leaderboard
+            $("#leaderboard-table").find("tr:gt(0)").remove();
+
+            for (var i = 0; i < statistics.leaderboard.length; i++) {
+                var golfer = statistics.leaderboard[i];
+
+                $("#leaderboard-table").append("<tr><td>" + golfer.rank + "</td>" +
+                    "<td>" + "<a href='/Statistics?golfer=" + golfer.golfer.alias + "'>" + golfer.golfer.name + "</a></td>" +
+                    "<td class='text-right'>" + golfer.par3Wins + "</td>" +
+                    "<td class='text-right'>" + golfer.gameWins + "</td>" +
+                    "<td class='text-right'>" + golfer.totalPoints + "</td>" +
+                    "<td class='text-right'>" + golfer.pointsBehind.toFixed(0) + "</td></tr>");
+
+            }
+
+            // selected season rounds
+            $("#rounds-table").find("tr:gt(0)").remove();
+
+            for (var i = 0; i < statistics.seasonStatistics.length; i++) {
+                var round = statistics.seasonStatistics[i];
+                var date = new Date(round.round.date);
+
+                $("#rounds-table").append("<tr><td nowrap>" + date.toDateString() + "</td>" +
+                    "<td>" + (round.round.isMajor ? "<i class='fa fa-trophy' title='Major'>&nbsp;</i>" : "") + round.round.name + "</td>" +
+                    "<td nowrap><a href='" + round.course.url + "' target='_blank'>" + round.course.name + "</a></td>" +
+                    "<td>" + round.round.game + "</td>" +
+                    "<td nowrap>" + (round.score == null ? "" : round.score) + "</td>" +
+                    "<td nowrap>" + (round.points == null ? "" : round.points) + "</td>" +
+                    "<td nowrap>" + (round.par3sWon == null ? "" : round.par3sWon) + "</td>" +
+                    "<td nowrap>" + (round.wonGame ? "<i class='fa fa-dollar' title='Won'></i>" : "") + "</td></tr>");
+
+            }
+
+            // charts
+            displayChart1(statistics.seasonStatistics);
+            displayChart2(statistics.allStatistics);
+        }
+
+        function refreshSeason() {
+            //TODO: only refresh leaderboard, rounds, seasonStats
+            refreshAll(null, null);
+        }
+
+        function refreshGolfer(golfer) {
+            //TODO: only refresh rounds, seasonStats, allStats
+            refreshAll(null, golfer);
+        }
+
+        // season statistics chart
+        function displayChart1(data) {
+
+            var categories = [];
+            var par3s = [];
+            var wins = [];
+            var points = [];
+            var scores = [];
+
+            for (i = 0; i < data.length; i++) {
+                var cat = {};
+                cat["label"] = data[i].round.date.split("T")[0];
+                categories.push(cat);
+
+                var par3 = {};
+                par3["value"] = data[i].par3sWon;
+                par3s.push(par3);
+
+                var win = {};
+                win["value"] = data[i].wonGame ? 1 : null;
+                wins.push(win);
+
+                var point = {};
+                point["value"] = data[i].points;
+                points.push(point);
+
+                var score = {};
+                score["value"] = data[i].score;
+                scores.push(score);
+            }
+
+            var chart = {
+                type: 'mscombidy2d',
+                renderAt: 'chart1-container',
+                width: '100%',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: {
+                    "chart": {
+                        "caption": getSelection("Seasons") + " Weekly Statistics for " + getSelectionText("Golfers"),
+                        "bgcolor": "FFFFFF",
+                        "plotgradientcolor": "",
+                        "showalternatehgridcolor": "0",
+                        "showplotborder": "0",
+                        "divlinecolor": "CCCCCC",
+                        "showvalues": "1",
+                        "showcanvasborder": "0",
+                        "pyaxisname": "#",
+                        "syaxisname": "Score",
+                        "syaxisMinValue": "30",
+                        "numberprefix": "",
+                        "labeldisplay": "rotate",
+                        "slantlabels": "1",
+                        "canvasborderalpha": "0",
+                        "legendshadow": "0",
+                        "legendborderalpha": "0",
+                        "showborder": "0",
+                        "animation": "1"
+                    },
+                    "categories": [
+                        {
+                            "category": categories
+                        }
+                    ],
+                    "dataset": [
+                        {
+                            "seriesname": "Par-3s",
+                            //"color": "008ee4",
+                            "data": par3s
+                        },
+                        {
+                            "seriesname": "Wins",
+                            "data": wins
+                        },
+                        {
+                            "seriesname": "Points",
+                            "data": points
+                        },
+                        {
+                            "seriesname": "Score",
+                            "parentyaxis": "S",
+                            "renderas": "Line",
+                            //"color": "f8bd19",
+                            "data": scores
+                        }
+                    ]
+                }
+            };
+
+            FusionCharts.ready(function (FusionCharts) {
+                var fusionChart = new FusionCharts(chart);
+                fusionChart.render('chart1-container');
+            });
+        }
+
+        // all seasons summary statistics chart
+        function displayChart2(data) {
+            var categories = [];
+            var par3s = [];
+            var wins = [];
+            var points = [];
+            var scores = [];
+
+            for (i = 0; i < data.length; i++) {
+                var cat = {};
+                cat["label"] = data[i].season.toString();
+                categories.push(cat);
+
+                var par3 = {};
+                par3["value"] = data[i].par3Wins;
+                par3s.push(par3);
+
+                var win = {};
+                win["value"] = data[i].gameWins;
+                wins.push(win);
+
+                var point = {};
+                point["value"] = data[i].totalPoints;
+                points.push(point);
+
+                var score = {};
+                score["value"] = data[i].averageToPar;
+                scores.push(score);
+            }
+
+            var chart = {
+                type: 'mscombidy2d',
+                renderAt: 'chart2-container',
+                width: '100%',
+                height: '400',
+                dataFormat: 'json',
+                dataSource: {
+                    "chart": {
+                        "caption": "Season Statistics for " + getSelectionText("Golfers"),
+                        "bgcolor": "FFFFFF",
+                        "plotgradientcolor": "",
+                        "showalternatehgridcolor": "0",
+                        "showplotborder": "0",
+                        "divlinecolor": "CCCCCC",
+                        "showvalues": "1",
+                        "showcanvasborder": "0",
+                        "pyaxisname": "#",
+                        "syaxisname": "Average +/- Par",
+                        "syaxisMinValue": "30",
+                        "numberprefix": "",
+                        "labeldisplay": "",
+                        "slantlabels": "0",
+                        "canvasborderalpha": "0",
+                        "legendshadow": "0",
+                        "legendborderalpha": "0",
+                        "showborder": "0",
+                        "animation": "1"
+                    },
+                    "categories": [
+                        {
+                            "category": categories
+                        }
+                    ],
+                    "dataset": [
+                        {
+                            "seriesname": "Par-3s",
+                            "data": par3s
+                        },
+                        {
+                            "seriesname": "Wins",
+                            "data": wins
+                        },
+                        {
+                            "seriesname": "Points",
+                            "data": points
+                        },
+                        {
+                            "seriesname": "Average +/- Par",
+                            "parentyaxis": "S",
+                            "renderas": "Line",
+                            "data": scores
+                        }
+                    ]
+                }
+            };
+
+            FusionCharts.ready(function (FusionCharts) {
+                var fusionChart = new FusionCharts(chart);
+                fusionChart.render('chart2-container');
+            });
+
+        }
+    </script>
+}
