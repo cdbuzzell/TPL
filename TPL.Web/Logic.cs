@@ -1,5 +1,6 @@
 ﻿using TPL.Model;
 using TPL.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace TPL.Web
 {
@@ -35,6 +36,22 @@ namespace TPL.Web
             }
 
             return champions;
+        }
+
+        public List<SelectListItem> GetSeasons(int firstSeason, int currentSeason)
+        {
+            //int currentSeason = Convert.ToInt32(_configuration["AppSettings:CurrentSeason"]);
+            //int firstSeason = Convert.ToInt32(_configuration["AppSettings:FirstSeason"]);
+
+            List<SelectListItem> seasons = new List<SelectListItem>();
+
+            for (int s = currentSeason; s >= firstSeason; s--)
+            {
+                // add every season between the last and first
+                seasons.Add(new SelectListItem { Value = s.ToString(), Text = s.ToString() });
+            }
+
+            return seasons;
         }
     }
 }
