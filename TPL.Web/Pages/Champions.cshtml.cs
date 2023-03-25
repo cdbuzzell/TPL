@@ -19,10 +19,11 @@ namespace TPL.Web.Pages
 
         public void OnGet()
         {
+            int season = Convert.ToInt32(_config["AppSettings:CurrentSeason"]);
             string connectionString = _config["Data:DefaultConnection:ConnectionString"];
             Logic bl = new Logic(connectionString);
 
-            Champions = bl.GetChampions(Convert.ToInt32(_config["AppSettings:CurrentSeason"]));
+            Champions = bl.GetChampions(season);
         }
     }
 }

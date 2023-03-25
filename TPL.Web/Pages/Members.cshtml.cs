@@ -19,10 +19,11 @@ namespace TPL.Web.Pages
         }
         public void OnGet()
         {
+            int season = Convert.ToInt32(_config["AppSettings:CurrentSeason"]);
             string connectionString = _config["Data:DefaultConnection:ConnectionString"];
             GolferData da = new GolferData(connectionString);
 
-            GolferSummaries = da.GetGolferSummaries(Convert.ToInt32(_config["AppSettings:CurrentSeason"]));
+            GolferSummaries = da.GetGolferSummaries(season);
         }
     }
 }
