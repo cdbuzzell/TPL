@@ -112,7 +112,7 @@
                 var golfer = statistics.leaderboard[i];
 
                 $("#leaderboard-table").append("<tr><td>" + golfer.rank + "</td>" +
-                    "<td>" + "<a href='/Statistics?golfer=" + golfer.golfer.alias + "'>" + golfer.golfer.name + "</a></td>" +
+                    "<td>" + "<a href='/Statistics?golfer=" + golfer.golfer.alias + "&season=" + getSelectionText("Seasons") + "'>" + golfer.golfer.name + "</a></td>" +
                     "<td class='text-right'>" + golfer.par3Wins + "</td>" +
                     "<td class='text-right'>" + golfer.gameWins + "</td>" +
                     "<td class='text-right'>" + golfer.totalPoints + "</td>" +
@@ -131,10 +131,10 @@
                     "<td>" + (round.round.isMajor ? "<i class='fa fa-trophy' title='Major'>&nbsp;</i>" : "") + round.round.name + "</td>" +
                     "<td nowrap><a href='" + round.course.url + "' target='_blank'>" + round.course.name + "</a></td>" +
                     "<td>" + round.round.game + "</td>" +
-                    "<td nowrap>" + (round.score == null ? "" : round.score) + "</td>" +
-                    "<td nowrap>" + (round.points == null ? "" : round.points) + "</td>" +
-                    "<td nowrap>" + (round.par3sWon == null ? "" : round.par3sWon) + "</td>" +
-                    "<td nowrap>" + (round.wonGame ? "<i class='fa fa-dollar' title='Won'></i>" : "") + "</td></tr>");
+                    "<td class='text-right' nowrap>" + (round.score == null ? "" : round.score) + "</td>" +
+                    "<td class='text-right' nowrap>" + (round.points == null ? "" : round.points) + "</td>" +
+                    "<td class='text-right' nowrap>" + (round.par3sWon == null ? "" : round.par3sWon) + "</td>" +
+                    "<td class='text-right' nowrap>" + (round.wonGame ? "<i class='fa fa-dollar' title='Won'></i>" : "") + "</td></tr>");
 
             }
 

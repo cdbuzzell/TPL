@@ -21,6 +21,19 @@ body {
   margin-bottom: 60px;
 }
 
+/* THIS SHOULD BE IN BOOTSTRAP, NOT HERE */
+.text-left {
+    text-align: left
+}
+
+.text-right {
+    text-align: right
+}
+
+.text-center {
+    text-align: center
+}
+
 /* The Parking Lot */
 #avatar {
     width: 100px;
