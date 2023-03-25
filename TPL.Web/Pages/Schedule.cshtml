@@ -41,7 +41,7 @@
                 // season in url query string, so select season in dropdown
                 document.getElementById("Seasons").value = season;
             }
-            //console.log("season = " + season);
+
             $.ajax({
                 url: '/Schedule?handler=ScheduleAjax&season=' + season,
                 type: 'GET',
@@ -51,7 +51,6 @@
         }
 
         function displaySchedule(schedule) {
-            //console.log("displaySchedule");
             $("#schedule").find("tr:gt(0)").remove();
 
             for (var i = 0; i < schedule.length; i++) {
