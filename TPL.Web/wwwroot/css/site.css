@@ -20,3 +20,63 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* The Parking Lot */
+#avatar {
+    width: 100px;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-bottom: 30px;
+    float: left;
+}
+
+    #avatar img, .avatar {
+        border-radius: 10px;
+    }
+
+#avatar-text {
+    padding-top: 5px;
+    width: 200px;
+    position: relative;
+    min-height: 1px;
+    float: left;
+}
+
+.selector {
+    text-align: right;
+    margin-top: 20px;
+}
+
+#leaderboard {
+    clear: both;
+}
+
+i.logo {
+    font-family: inherit;
+    font-size: 11px;
+    color: black;
+    font-weight: 900;
+}
+
+#champions td, #members td {
+    vertical-align: middle;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+th.border-left, td.border-left {
+    border-left: 1px solid #ddd;
+}
