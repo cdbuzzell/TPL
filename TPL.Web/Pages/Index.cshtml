@@ -1,5 +1,5 @@
 ﻿@page
-@using TPL.Model
+@inject IConfiguration Configuration
 @model IndexModel
 @{
     ViewData["Title"] = "Home";
@@ -11,33 +11,129 @@
     @Model.Season
 </div>
 
-@if (Model.Schedule.Count > 0)
-{
-    <div id="rounds">
-        <h3>Upcoming Rounds</h3>
-        <table class="table">
-            <tr>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Event</th>
-                <th>Game</th>
-                <th>Beer</th>
-                <th>Food</th>
-            </tr>
-            @foreach (Round round in Model.Schedule)
+<div class="row">
+    <div class="col-md-4">
+        <div id="beerduty">
+            @if (Model.Schedule.Count > 0)
             {
-                <tr>
-                    <td>@round.Date.ToString("ddd M/dd")</td>
-                    <td>@round.Date.ToString("h:mm tt")</td>
-                    <td>@if (round.IsMajor)
-                        {
-                            <i class="fa fa-trophy" title="Major">&nbsp;</i>
-                        }@round.Name</td>
-                    <td>@round.Game</td>
-                    <td>@round.BeerDuty.Name</td>
-                    <td>@round.FoodDuty.Name</td>
-                </tr>
+                <div id="avatar">
+                    @if (Model.Schedule[0].BeerDuty.Avatar != null)
+                    {
+                        <img src="@(String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(Model.Schedule[0].BeerDuty.Avatar)))" title="@Model.Schedule[0].BeerDuty.Name" />
+                    }
+                    else
+                    {
+                        <img src="~/images/avatar.jpg" title="@Model.Schedule[0].BeerDuty.Name" />
+                    }
+                </div>
+                <div id="avatar-text">
+                    <h3>Beer Duty<br />@(Model.Schedule[0].Date.ToString("M/dd")) @(Model.Schedule[0].BeerDuty.Name)</h3>
+                </div>
             }
-        </table>
+        </div>
+        <div id="leaderboard">
+            <h3>@Model.Season Leaderboard</h3>
+            <table class="table">
+                <tr>
+                    <th>Rank</th>
+                    <th>Golfer</th>
+                    <th class="text-right">Par-3s</th>
+                    <th class="text-right">Wins</th>
+                    <th class="text-right">Points</th>
+                    <th class="text-right">Behind</th>
+                </tr>
+                @foreach (GolferSeasonTotal golfer in Model.Leaderboard)
+                {
+                    <tr>
+                        <td>@golfer.Rank</td>
+                        <td><a href="/Home/Statistics?golfer=@golfer.Golfer.Alias">@golfer.Golfer.Name</a></td>
+                        <td class="text-right">@golfer.Par3Wins</td>
+                        <td class="text-right">@golfer.GameWins</td>
+                        <td class="text-right">@golfer.TotalPoints</td>
+                        <td class="text-right">@golfer.PointsBehind</td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div id="twitter">
+            <a class="twitter-timeline" data-link-color="" data-chrome="nofooter transparent" data-border-color="" data-tweet-limit="5" data-dnt="true" href='https://twitter.com/@Configuration["AppSettings:TwitterUsername"]' data-widget-id='@Configuration["AppSettings:TwitterWidgetId"]'>Tweets by @@@Configuration["AppSettings:TwitterUsername"]</a>
+            <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
+        </div>
     </div>
-}
+    <div class="col-md-8">
+        <iframe id="forecast_embed" type="text/html" frameborder="0" height="225" width="100%"
+                src="https://forecast.io/embed/#lat=@Configuration["AppSettings:WeatherDefaultLat"]&lon=@Configuration["AppSettings:WeatherDefaultLong"]&name=@Configuration["AppSettings:WeatherDefaultName"]&color=#00aaff&font=Segoe UI&units=us">
+        </iframe>
+
+        @if (Model.Schedule.Count > 0)
+        {
+            <div id="rounds">
+                <h3>Upcoming Rounds</h3>
+                <table class="table">
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Event</th>
+                        <th>Game</th>
+                        <th>Beer</th>
+                        <th>Food</th>
+                    </tr>
+                    @foreach (Round round in Model.Schedule)
+                    {
+                        <tr>
+                            <td>@round.Date.ToString("ddd M/dd")</td>
+                            <td>@round.Date.ToString("h:mm tt")</td>
+                            <td>@if (round.IsMajor){<i class="fa fa-trophy" title="Major">&nbsp;</i>}@round.Name</td>
+                            <td>@round.Game</td>
+                            <td>@round.BeerDuty.Name</td>
+                            <td>@round.FoodDuty.Name</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+
+        @if (Model.Champions.Count > 0)
+        {
+            <div id="champions">
+                <h3>Past Champions</h3>
+                <table class="table" id="champions">
+                    <tr>
+                        <th>Season</th>
+                        <th>Champion</th>
+                        <th>Par-3s</th>
+                        <th>Wins</th>
+                        <th>Points</th>
+                        <th>Runners Up</th>
+                    </tr>
+                    @foreach (SeasonChampion season in Model.Champions)
+                    {
+                        <tr>
+                            <td class="fa-2x">@season.Season</td>
+                            <td>
+                                @if (season.Champion.Golfer.Avatar != null)
+                                {
+                                    <img class="avatar" src="@(String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(season.Champion.Golfer.Avatar)))" title="@season.Champion.Golfer.Name" />
+                                }
+                                else
+                                {
+                                    <img class="avatar" src="~/images/avatar.jpg" title="@season.Champion.Golfer.Name" />
+                                }
+                                <a href="/Home/Statistics?golfer=@season.Champion.Golfer.Alias&season=@season.Season" class="fa-2x">@season.Champion.Golfer.Name</a>
+                            </td>
+                            <td>@season.Champion.Par3Wins</td>
+                            <td>@season.Champion.GameWins</td>
+                            <td>@season.Champion.TotalPoints</td>
+                            <td>
+                                2nd: <a href="/Home/Statistics?golfer=@season.RunnerUp.Golfer.Alias&season=@season.Season">@season.RunnerUp.Golfer.Name</a>
+                                <br />
+                                3rd:
+                                <a href="/Home/Statistics?golfer=@season.SecondRunnerUp.Golfer.Alias&season=@season.Season">@season.SecondRunnerUp.Golfer.Name</a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    </div>
+</div>

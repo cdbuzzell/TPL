@@ -27,22 +27,23 @@ namespace TPL.Web.Pages
             ScheduleData da = new ScheduleData(connectionString);
 
             // get year from appSettings
-            //Season = _appSettings.Value.CurrentSeason;
-            //Season = Convert.ToInt32(_config.GetSection("AppSettings")["CurrentSeason"]);
             Season = Convert.ToInt32(_config["AppSettings:CurrentSeason"]);
 
-            //List<GolferSeasonTotal> leaderboard = da.GetLeaderboard(season);
+            Leaderboard = da.GetLeaderboard(Season);
 
             // filter schedule to upcoming dates only
             DateTime today = DateTime.Now.AddHours(-5); //TODO: azure sql server is local while DateTime.Now is UTC, so this is a hack until I figure out how to get it to work the right way
             Schedule = da.GetSchedule(Season).Where(round => DateTime.Compare(round.Date, today) >= 0).ToList();
 
-            //List<SeasonChampion> champions = new List<SeasonChampion>();
-            //// only display past champions if we have <10 rounds remaining this year to fill the page
-            //if (Schedule.Count < 10)
-            //{
-            //    champions = GetChampions();
-            //}
+            Champions = new List<SeasonChampion>();
+            // only display past champions if we have <10 rounds remaining this year to fill the page
+            if (Schedule.Count < 10)
+            {
+                Logic bl = new Logic(connectionString);
+                Champions = bl.GetChampions(Season);
+            }
         }
+
+        
     }
 }
