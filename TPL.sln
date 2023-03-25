@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPL.Model", "TPL.Model\TPL.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPL.Web", "TPL.Web\TPL.Web.csproj", "{AD49AB53-C3F6-48FC-94FD-1172788A60D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPL.Test", "TPL.Test\TPL.Test.csproj", "{66988523-9171-4051-80CD-1E9993809944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPL.Mobile", "TPL.Mobile\TPL.Mobile.csproj", "{B123612C-AA93-4132-B348-549E2F6C661D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,16 @@ Global
 		{AD49AB53-C3F6-48FC-94FD-1172788A60D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD49AB53-C3F6-48FC-94FD-1172788A60D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD49AB53-C3F6-48FC-94FD-1172788A60D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66988523-9171-4051-80CD-1E9993809944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66988523-9171-4051-80CD-1E9993809944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66988523-9171-4051-80CD-1E9993809944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66988523-9171-4051-80CD-1E9993809944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B123612C-AA93-4132-B348-549E2F6C661D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B123612C-AA93-4132-B348-549E2F6C661D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B123612C-AA93-4132-B348-549E2F6C661D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B123612C-AA93-4132-B348-549E2F6C661D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B123612C-AA93-4132-B348-549E2F6C661D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B123612C-AA93-4132-B348-549E2F6C661D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
