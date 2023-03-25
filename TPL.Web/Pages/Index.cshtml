@@ -1,0 +1,43 @@
+﻿@page
+@using TPL.Model
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @Model.Season
+</div>
+
+@if (Model.Schedule.Count > 0)
+{
+    <div id="rounds">
+        <h3>Upcoming Rounds</h3>
+        <table class="table">
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Event</th>
+                <th>Game</th>
+                <th>Beer</th>
+                <th>Food</th>
+            </tr>
+            @foreach (Round round in Model.Schedule)
+            {
+                <tr>
+                    <td>@round.Date.ToString("ddd M/dd")</td>
+                    <td>@round.Date.ToString("h:mm tt")</td>
+                    <td>@if (round.IsMajor)
+                        {
+                            <i class="fa fa-trophy" title="Major">&nbsp;</i>
+                        }@round.Name</td>
+                    <td>@round.Game</td>
+                    <td>@round.BeerDuty.Name</td>
+                    <td>@round.FoodDuty.Name</td>
+                </tr>
+            }
+        </table>
+    </div>
+}
