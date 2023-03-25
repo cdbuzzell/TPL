@@ -11,7 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-SELECT	ROW_NUMBER() OVER (ORDER BY SUM(ISNULL(Points, 0)) DESC) AS Rank, 
+SELECT	RANK() OVER (ORDER BY SUM(ISNULL(Points, 0)) DESC) AS Rank, 
 		GolferId, Name AS GolferName, Alias, @Season AS Season,
 		SUM(ISNULL(Par3sWon, 0)) AS Par3Wins,
 		COUNT(CASE WHEN WonGame=1 THEN 1 ELSE NULL END) AS GameWins,
