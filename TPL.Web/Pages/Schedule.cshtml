@@ -20,6 +20,7 @@
         <th>Event</th>
         <th>Course</th>
         <th>Beer Duty</th>
+        <th>Food Duty</th>
         <th>Game</th>
     </tr>
 </table>
@@ -63,6 +64,7 @@
                     "<td nowrap>" + (round.isMajor ? "<i class='fa fa-trophy' title='Major'>&nbsp;</i>" : "") + round.name + "</td>" +
                     "<td nowrap><a href='" + round.course.url + "' target='_blank'>" + round.course.name + "</a></td>" +
                     "<td nowrap>" + round.beerDuty.name + "</td>" +
+                    "<td nowrap>" + round.foodDuty.name + "</td>" +
                     "<td>" + round.game + "</td></tr>");
 
             }
