@@ -34,7 +34,19 @@ body {
     text-align: center
 }
 
+a {
+    text-decoration: none;
+}
+
 /* The Parking Lot */
+/*
+a.navbar-brand {
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: -8px
+}
+    */
+
 #avatar {
     width: 100px;
     position: relative;
@@ -46,12 +58,12 @@ body {
     float: left;
 }
 
-    #avatar img, .avatar {
-        border-radius: 10px;
-    }
+#avatar img, .avatar {
+    border-radius: 10px;
+}
 
 #avatar-text {
-    padding-top: 5px;
+    padding-top: 20px;
     width: 200px;
     position: relative;
     min-height: 1px;
@@ -92,4 +104,22 @@ i.logo {
 
 th.border-left, td.border-left {
     border-left: 1px solid #ddd;
+}
+
+h2 {
+    font-size: 2.8rem;
+    font-weight: 350;
+    line-height: 1.25;
+}
+
+h3 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+h4 {
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1.0;
 }
