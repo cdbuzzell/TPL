@@ -53,9 +53,11 @@
         </div>
     </div>
     <div class="col-md-8">
-        <iframe id="forecast_embed" type="text/html" frameborder="0" height="225" width="100%"
-                src="https://forecast.io/embed/#lat=@Configuration["AppSettings:WeatherDefaultLat"]&lon=@Configuration["AppSettings:WeatherDefaultLong"]&name=@Configuration["AppSettings:WeatherDefaultName"]&color=#00aaff&font=Segoe UI&units=us">
-        </iframe>
+        <a class="weatherwidget-io" href="https://forecast7.com/en/44d85n93d04/inver-grove-heights/?unit=us" data-label_1="Arbor Pointe Golf Club" data-theme="original">Arbor Pointe Golf Club</a>
+        <script>
+            !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+        </script>
+        <br />
 
         @if (Model.Schedule.Count > 0)
         {
