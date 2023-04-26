@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="f42f5000-3958-4878-bba0-6975a1ab5613" ChangeDateTime="04/26/2023 01:46:33">
+    <Property Name="ElementName" Value="[dbo].[RoundRsvp].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RoundRsvp]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RoundRsvpId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cc014aa4-e27b-48b1-9eba-f1120dd8fa55" ChangeDateTime="04/26/2023 02:01:13">
+    <Property Name="ElementName" Value="[dbo].[RoundRsvp].[Response]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[RoundRsvp]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsGolfing" />
+  </Operation>
+</Operations>
