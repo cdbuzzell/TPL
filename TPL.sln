@@ -13,9 +13,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPL.Model", "TPL.Model\TPL.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPL.Web", "TPL.Web\TPL.Web.csproj", "{AD49AB53-C3F6-48FC-94FD-1172788A60D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPL.Test", "TPL.Test\TPL.Test.csproj", "{66988523-9171-4051-80CD-1E9993809944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPL.Test", "TPL.Test\TPL.Test.csproj", "{66988523-9171-4051-80CD-1E9993809944}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TPL.Mobile", "TPL.Mobile\TPL.Mobile.csproj", "{B123612C-AA93-4132-B348-549E2F6C661D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TPL.Mobile", "TPL.Mobile\TPL.Mobile.csproj", "{B123612C-AA93-4132-B348-549E2F6C661D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TPL.SMS", "TPL.SMS", "{458D4CAC-426E-430D-BF4A-7E0D45BECAAB}"
+	ProjectSection(SolutionItems) = preProject
+		TPL.SMS\TPL-ReceiveText.LogicApp.json = TPL.SMS\TPL-ReceiveText.LogicApp.json
+		TPL.SMS\TPL-TextCommissioners.LogicApp.json = TPL.SMS\TPL-TextCommissioners.LogicApp.json
+		TPL.SMS\TPL-TextMembers.LogicApp.json = TPL.SMS\TPL-TextMembers.LogicApp.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
