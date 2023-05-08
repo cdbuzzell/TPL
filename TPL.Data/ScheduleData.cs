@@ -150,5 +150,42 @@ namespace TPL.Data
 
             return leaderboard;
         }
+
+        public List<RoundRsvp> GetRoundRsvps(Guid roundId)
+        {
+            List<RoundRsvp> rsvps = new List<RoundRsvp>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("GetRoundRsvps", connection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            rsvps.Add(new RoundRsvp
+                            {
+                                RoundId = (Guid)reader["RoundId"],
+                                Golfer = new Golfer
+                                {
+                                    GolferId = reader["GolferId"] == DBNull.Value ? Guid.Empty : (Guid)reader["GolferId"],
+                                    Alias = reader["Alias"].ToString(),
+                                    Name = reader["Name"].ToString()
+                                },
+                                Responded = Convert.ToDateTime(reader["ResponseDateTime"]),
+                                IsGolfing = (bool)reader["IsGolfing"]
+                            });
+                        }
+                    }
+
+                    connection.Close();
+                }
+            }
+
+            return rsvps;
+        }
     }
 }

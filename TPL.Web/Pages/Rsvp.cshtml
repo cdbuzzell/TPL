@@ -1,0 +1,21 @@
+﻿@page
+@model TPL.Web.Pages.RsvpModel
+@{
+    ViewData["Title"] = "RSVPs";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table" id="rsvp">
+    <tr>
+        <th>Member</th>
+        <th class="align-right">Golfing?</th>
+    </tr>
+    @foreach (RoundRsvp rsvp in Model.Rsvps)
+    {
+        <tr>
+            <td><a href="/Statistics?golfer=@rsvp.Golfer.Alias" class="fa-2x">@rsvp.Golfer.Name</a></td>
+            <td class="fa-2x align-right">@(rsvp.IsGolfing ? "IN" : "OUT")</td>
+        </tr>
+    }
+</table>
