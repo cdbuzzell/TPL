@@ -9,7 +9,7 @@ BEGIN
 SELECT	RR.RoundId, RR.GolferId, G.Alias, G.[Name], RR.ResponseDateTime, RR.IsGolfing
 FROM	RoundRsvp RR
 		LEFT OUTER JOIN Golfer G ON RR.GolferId = G.GolferId
-WHERE	RoundId = (SELECT TOP 1 RoundId FROM [dbo].[Round] WHERE COALESCE(@Date, GETDATE()) <= [Date] ORDER BY [Date])
+WHERE	RoundId = (SELECT TOP 1 RoundId FROM [dbo].[Round] WHERE COALESCE(@Date, DATEADD(Hour, -5, getdate())) <= [Date] ORDER BY [Date])
 ORDER BY RR.IsGolfing
 
 END
